@@ -24,9 +24,7 @@ function App() {
     useState("all");
 
 
-  // ============================
   // LOAD ASSIGNMENTS
-  // ============================
 
   useEffect(() => {
 
@@ -35,8 +33,6 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
-
-        console.log(data);
 
         setAssignments(data);
 
@@ -48,9 +44,7 @@ function App() {
   }, []);
 
 
-  // ============================
   // SUBMIT ASSIGNMENT
-  // ============================
 
   const submitAssignment =
     async (id, submission) => {
@@ -83,9 +77,7 @@ function App() {
     };
 
 
-  // ============================
   // COMPLETE ASSIGNMENT
-  // ============================
 
   const completeAssignment =
     async (id) => {
@@ -109,9 +101,7 @@ function App() {
     };
 
 
-  // ============================
   // STATUS COLORS
-  // ============================
 
   const getStatusColor =
     (status) => {
@@ -128,15 +118,12 @@ function App() {
     };
 
 
-  // ============================
-  // ANALYTICS DATA
-  // ============================
+  // ANALYTICS
 
   const analyticsData = [
 
     {
       name: "Pending",
-
       value:
         assignments.filter(
           (a) =>
@@ -147,7 +134,6 @@ function App() {
 
     {
       name: "Submitted",
-
       value:
         assignments.filter(
           (a) =>
@@ -158,7 +144,6 @@ function App() {
 
     {
       name: "Completed",
-
       value:
         assignments.filter(
           (a) =>
@@ -176,9 +161,7 @@ function App() {
   ];
 
 
-  // ============================
-  // FILTER LOGIC
-  // ============================
+  // FILTERS
 
   const filteredAssignments =
     assignments.filter((assignment) => {
@@ -228,11 +211,12 @@ function App() {
       }}
     >
 
+      {/* HEADER */}
+
       <h1
         style={{
           textAlign: "center",
           fontSize: "60px",
-          marginBottom: "10px",
         }}
       >
         Classroom Companion 🚀
@@ -258,7 +242,6 @@ function App() {
           justifyContent: "center",
           gap: "20px",
           marginBottom: "40px",
-          flexWrap: "wrap",
         }}
       >
 
@@ -276,7 +259,6 @@ function App() {
                 ? "#2563eb"
                 : "#1e293b",
             color: "white",
-            fontSize: "16px",
           }}
         >
           Teacher Dashboard
@@ -296,7 +278,6 @@ function App() {
                 ? "#2563eb"
                 : "#1e293b",
             color: "white",
-            fontSize: "16px",
           }}
         >
           Student Dashboard
@@ -305,19 +286,18 @@ function App() {
       </div>
 
 
-      {/* SEARCH + FILTER */}
+      {/* SEARCH */}
 
       <div
         style={{
           display: "flex",
           gap: "20px",
           marginBottom: "30px",
-          flexWrap: "wrap",
         }}
       >
 
         <input
-          placeholder="Search assignments or students..."
+          placeholder="Search..."
           value={search}
           onChange={(e) =>
             setSearch(e.target.value)
@@ -326,8 +306,7 @@ function App() {
             padding: "14px",
             borderRadius: "12px",
             border: "none",
-            width: "320px",
-            fontSize: "16px",
+            width: "300px",
           }}
         />
 
@@ -342,12 +321,11 @@ function App() {
             padding: "14px",
             borderRadius: "12px",
             border: "none",
-            fontSize: "16px",
           }}
         >
 
           <option value="all">
-            All Status
+            All
           </option>
 
           <option value="pending">
@@ -383,7 +361,6 @@ function App() {
         <h2
           style={{
             textAlign: "center",
-            marginBottom: "20px",
           }}
         >
           Assignment Analytics 📊
@@ -452,8 +429,6 @@ function App() {
                 padding: "25px",
                 borderRadius:
                   "24px",
-                boxShadow:
-                  "0 10px 30px rgba(0,0,0,0.3)",
               }}
             >
 
@@ -500,6 +475,153 @@ function App() {
                   assignment.dueDate
                 ).toLocaleDateString()}
               </p>
+
+
+              {/* STUDENT DASHBOARD */}
+
+              {view ===
+                "student" && (
+
+                <div
+                  style={{
+                    marginTop:
+                      "20px",
+                  }}
+                >
+
+                  <textarea
+                    placeholder="Write submission..."
+                    onChange={(e) => {
+                      assignment.tempSubmission =
+                        e.target.value;
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "100px",
+                      borderRadius:
+                        "12px",
+                      padding: "10px",
+                      marginBottom:
+                        "10px",
+                    }}
+                  />
+
+                  <button
+                    onClick={() =>
+                      submitAssignment(
+                        assignment.id,
+                        assignment.tempSubmission
+                      )
+                    }
+                    style={{
+                      padding:
+                        "10px 20px",
+                      borderRadius:
+                        "12px",
+                      border: "none",
+                      background:
+                        "#2563eb",
+                      color:
+                        "white",
+                      cursor:
+                        "pointer",
+                    }}
+                  >
+                    Submit Assignment
+                  </button>
+
+                </div>
+              )}
+
+
+              {/* TEACHER DASHBOARD */}
+
+              {view ===
+                "teacher" && (
+
+                <div
+                  style={{
+                    marginTop:
+                      "20px",
+                  }}
+                >
+
+                  <button
+                    onClick={() =>
+                      completeAssignment(
+                        assignment.id
+                      )
+                    }
+                    style={{
+                      padding:
+                        "10px 20px",
+                      borderRadius:
+                        "12px",
+                      border: "none",
+                      background:
+                        "#22c55e",
+                      color:
+                        "white",
+                      cursor:
+                        "pointer",
+                    }}
+                  >
+                    Mark Completed
+                  </button>
+
+                </div>
+              )}
+
+
+              {/* PROGRESS LOGS */}
+
+              <div
+                style={{
+                  marginTop:
+                    "20px",
+                }}
+              >
+
+                <h3>
+                  Progress Logs
+                </h3>
+
+                {assignment
+                  .progressLogs
+                  ?.length ===
+                0 ? (
+
+                  <p>
+                    No progress yet
+                  </p>
+
+                ) : (
+
+                  assignment.progressLogs?.map(
+                    (log) => (
+
+                      <div
+                        key={log.id}
+                        style={{
+                          background:
+                            "#1e293b",
+                          padding:
+                            "10px",
+                          borderRadius:
+                            "10px",
+                          marginTop:
+                            "10px",
+                        }}
+                      >
+                        ✅ {log.message}
+                      </div>
+
+                    )
+                  )
+
+                )}
+
+              </div>
 
             </div>
 
