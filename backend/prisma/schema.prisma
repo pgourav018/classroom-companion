@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id           Int          @id @default(autoincrement())
+
+  telegramId   String       @unique
+  name         String
+  inviteCode   String       @unique
+
+  students     Student[]
+  assignments  Assignment[]
+
+  createdAt    DateTime     @default(now())
+}
+
+model Student {
+  id            Int          @id @default(autoincrement())
+
+  telegramId    String       @unique
+  name          String
+
+  teacherId     Int
+
+  teacher       Teacher      @relation(fields: [teacherId], references: [id])
+
+  assignments   Assignment[]
+
+  createdAt     DateTime     @default(now())
+}
+
+model Assignment {
+  id            Int          @id @default(autoincrement())
+
+  title         String
+  description   String?
+
+  dueDate       DateTime
+
+  // pending, completed
+  status        String       @default("pending")
+
+  submission 	String?
+  feedback 	String?
+
+  teacherId     Int
+  studentId     Int
+
+  teacher       Teacher      @relation(fields: [teacherId], references: [id])
+
+  student       Student      @relation(fields: [studentId], references: [id])
+
+  progressLogs  Progress[]
+
+  createdAt     DateTime     @default(now())
+}
+
+model Progress {
+  id            Int          @id @default(autoincrement())
+
+  message       String
+
+  assignmentId  Int
+
+  assignment    Assignment   @relation(fields: [assignmentId], references: [id])
+
+  createdAt     DateTime     @default(now())
+}

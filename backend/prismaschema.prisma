@@ -1,0 +1,8 @@
+model Teacher {
+  id          Int          @id @default(autoincrement())
+  telegramId  String       @unique
+  name        String
+  inviteCode  String       @unique
+  students    Student[]
+  assignments Assignment[]
+}
