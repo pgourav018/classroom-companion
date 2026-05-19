@@ -17,8 +17,6 @@ function App() {
   const [view, setView] =
     useState("teacher");
 
-  // SEARCH + FILTER
-
   const [search, setSearch] =
     useState("");
 
@@ -32,7 +30,9 @@ function App() {
 
   useEffect(() => {
 
-    fetch("http://localhost:3000/assignments")
+    fetch(
+      "https://classroom-companion-3hvr.onrender.com/assignments"
+    )
       .then((res) => res.json())
       .then((data) => {
 
@@ -58,7 +58,7 @@ function App() {
       try {
 
         await fetch(
-          `http://localhost:3000/assignments/${id}/submit`,
+          `https://classroom-companion-3hvr.onrender.com/assignments/${id}/submit`,
           {
             method: "POST",
 
@@ -93,7 +93,7 @@ function App() {
       try {
 
         await fetch(
-          `http://localhost:3000/assignments/${id}/complete`,
+          `https://classroom-companion-3hvr.onrender.com/assignments/${id}/complete`,
           {
             method: "POST",
           }
@@ -228,8 +228,6 @@ function App() {
       }}
     >
 
-      {/* HEADER */}
-
       <h1
         style={{
           textAlign: "center",
@@ -333,7 +331,6 @@ function App() {
           }}
         />
 
-
         <select
           value={statusFilter}
           onChange={(e) =>
@@ -370,7 +367,7 @@ function App() {
       </div>
 
 
-      {/* ANALYTICS CHART */}
+      {/* ANALYTICS */}
 
       <div
         style={{
@@ -460,12 +457,7 @@ function App() {
               }}
             >
 
-              <h2
-                style={{
-                  marginBottom:
-                    "20px",
-                }}
-              >
+              <h2>
                 {assignment.title}
               </h2>
 
@@ -508,170 +500,6 @@ function App() {
                   assignment.dueDate
                 ).toLocaleDateString()}
               </p>
-
-              <p>
-                <strong>
-                  Submission:
-                </strong>{" "}
-                {assignment.submission ||
-                  "No submission"}
-              </p>
-
-              <p>
-                <strong>
-                  Feedback:
-                </strong>{" "}
-                {assignment.feedback ||
-                  "No feedback"}
-              </p>
-
-
-              {/* STUDENT VIEW */}
-
-              {view ===
-                "student" && (
-
-                <div
-                  style={{
-                    marginTop:
-                      "20px",
-                  }}
-                >
-
-                  <textarea
-                    placeholder="Write submission..."
-                    onChange={(e) => {
-                      assignment.tempSubmission =
-                        e.target.value;
-                    }}
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius:
-                        "12px",
-                      padding: "10px",
-                      marginBottom:
-                        "10px",
-                    }}
-                  />
-
-                  <button
-                    onClick={() =>
-                      submitAssignment(
-                        assignment.id,
-                        assignment.tempSubmission
-                      )
-                    }
-                    style={{
-                      padding:
-                        "10px 20px",
-                      borderRadius:
-                        "12px",
-                      border: "none",
-                      background:
-                        "#2563eb",
-                      color:
-                        "white",
-                      cursor:
-                        "pointer",
-                    }}
-                  >
-                    Submit Assignment
-                  </button>
-
-                </div>
-              )}
-
-
-              {/* TEACHER VIEW */}
-
-              {view ===
-                "teacher" && (
-
-                <div
-                  style={{
-                    marginTop:
-                      "20px",
-                  }}
-                >
-
-                  <button
-                    onClick={() =>
-                      completeAssignment(
-                        assignment.id
-                      )
-                    }
-                    style={{
-                      padding:
-                        "10px 20px",
-                      borderRadius:
-                        "12px",
-                      border: "none",
-                      background:
-                        "#22c55e",
-                      color:
-                        "white",
-                      cursor:
-                        "pointer",
-                    }}
-                  >
-                    Mark Completed
-                  </button>
-
-                </div>
-              )}
-
-
-              {/* PROGRESS LOGS */}
-
-              <div
-                style={{
-                  marginTop:
-                    "25px",
-                }}
-              >
-
-                <h3>
-                  Progress Logs
-                </h3>
-
-                {assignment
-                  .progressLogs
-                  ?.length ===
-                0 ? (
-
-                  <p>
-                    No progress yet
-                  </p>
-
-                ) : (
-
-                  assignment.progressLogs?.map(
-                    (log) => (
-
-                      <div
-                        key={log.id}
-                        style={{
-                          background:
-                            "#1e293b",
-                          padding:
-                            "10px",
-                          borderRadius:
-                            "12px",
-                          marginTop:
-                            "10px",
-                        }}
-                      >
-                        ✅{" "}
-                        {log.message}
-                      </div>
-
-                    )
-                  )
-
-                )}
-
-              </div>
 
             </div>
 
